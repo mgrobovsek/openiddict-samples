@@ -1,4 +1,4 @@
-# OpenIddict samples
+# OpenIddict samples test
 
 This repository contains samples demonstrating **how to use [OpenIddict](https://github.com/openiddict/openiddict-core) with the different OAuth 2.0/OpenID Connect flows**.
 
