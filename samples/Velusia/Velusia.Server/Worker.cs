@@ -25,6 +25,9 @@ public class Worker : IHostedService
 
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
 
+        var mvc= await manager.FindByClientIdAsync("mvc");
+        await manager.DeleteAsync(mvc);
+
         if (await manager.FindByClientIdAsync("mvc") == null)
         {
             await manager.CreateAsync(new OpenIddictApplicationDescriptor
@@ -35,11 +38,15 @@ public class Worker : IHostedService
                 DisplayName = "MVC client application",
                 RedirectUris =
                 {
-                    new Uri("https://localhost:44338/callback/login/local")
+                    new Uri("https://localhost:44338/callback/login/local"),
+                    new Uri("http://localhost:44338/callback/login/local"),
+                    new Uri("http://b.local2:44338/callback/login/local")
                 },
                 PostLogoutRedirectUris =
                 {
-                    new Uri("https://localhost:44338/callback/logout/local")
+                    new Uri("http://localhost:44338/callback/logout/local"),
+                    new Uri("https://localhost:44338/callback/logout/local"),
+                    new Uri("http://b.local2:44338/callback/logout/local")
                 },
                 Permissions =
                 {

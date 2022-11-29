@@ -42,6 +42,11 @@ public class Startup
             .AddDefaultTokenProviders()
             .AddDefaultUI();
 
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+        });
+
         // OpenIddict offers native integration with Quartz.NET to perform scheduled tasks
         // (like pruning orphaned authorizations/tokens from the database) at regular intervals.
         services.AddQuartz(options =>
@@ -94,7 +99,8 @@ public class Startup
                        .EnableLogoutEndpointPassthrough()
                        .EnableTokenEndpointPassthrough()
                        .EnableUserinfoEndpointPassthrough()
-                       .EnableStatusCodePagesIntegration();
+                       .EnableStatusCodePagesIntegration()
+                       .DisableTransportSecurityRequirement();
             })
 
             // Register the OpenIddict validation components.

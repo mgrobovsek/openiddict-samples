@@ -31,6 +31,11 @@ public class Startup
             options.UseOpenIddict();
         });
 
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+        });
+
         services.AddAuthentication(options =>
         {
             options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -42,7 +47,10 @@ public class Startup
             options.LogoutPath = "/logout";
             options.ExpireTimeSpan = TimeSpan.FromMinutes(50);
             options.SlidingExpiration = false;
+            //options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.None;
         });
+
+        
 
         // OpenIddict offers native integration with Quartz.NET to perform scheduled tasks
         // (like pruning orphaned authorizations from the database) at regular intervals.
@@ -110,14 +118,17 @@ public class Startup
                 // Add a client registration matching the client application definition in the server project.
                 options.AddRegistration(new OpenIddictClientRegistration
                 {
-                    Issuer = new Uri("https://localhost:44313/", UriKind.Absolute),
+                    Issuer = new Uri("http://a.local1:44313/", UriKind.Absolute),
 
                     ClientId = "mvc",
                     ClientSecret = "901564A5-E7FE-42CB-B10D-61EF6A8F3654",
                     Scopes = { Scopes.Email, Scopes.Profile },
 
-                    RedirectUri = new Uri("https://localhost:44338/callback/login/local", UriKind.Absolute),
-                    PostLogoutRedirectUri = new Uri("https://localhost:44338/callback/logout/local", UriKind.Absolute)
+                    RedirectUri = new Uri("http://b.local2:44338/callback/login/local", UriKind.Absolute),
+                    PostLogoutRedirectUri = new Uri("http://b.local2:44338/callback/logout/local", UriKind.Absolute)
+
+                    //RedirectUri = new Uri("http://localhost:44338/callback/login/local", UriKind.Absolute),
+                    //PostLogoutRedirectUri = new Uri("http://localhost:44338/callback/logout/local", UriKind.Absolute)
                 });
             });
 
